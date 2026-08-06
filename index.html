@@ -66,7 +66,7 @@
         .login-logo { max-width: 300px; width: 100%; margin-bottom: 20px; filter: drop-shadow(0 0 30px var(--pelo-gold)); display: block; margin: 0 auto 20px; }
         .login-title { font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, var(--pelo-gold), var(--pelo-green)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 4px; }
         .login-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 25px; font-family: var(--font-mono); letter-spacing: 2px; }
-        .login-trial { font-size: 0.7rem; color: var(--pelo-gold); margin-bottom: 15px; background: rgba(200,164,80,0.1); padding: 8px 16px; border-radius: 30px; display: inline-block; }
+        .login-trial { font-size: 0.7rem; color: var(--success); margin-bottom: 15px; background: rgba(0,255,136,0.1); padding: 8px 16px; border-radius: 30px; display: inline-block; }
         
         .auth-separator { display: flex; align-items: center; gap: 15px; margin: 16px 0; color: var(--text-secondary); font-size: 0.65rem; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: var(--glass-border); }
@@ -324,9 +324,21 @@
         .footer-logos img { height: 45px; width: auto; opacity: 0.8; transition: all 0.3s; }
         .footer-logos img:hover { opacity: 1; transform: scale(1.05); }
         
-        .trial-banner { background: rgba(200,164,80,0.15); border: 1px solid var(--pelo-gold); border-radius: 12px; padding: 12px 16px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .trial-banner .days { color: var(--pelo-gold); font-weight: 700; }
-        .trial-banner .pay-btn { background: var(--pelo-gold); border: none; padding: 8px 20px; border-radius: 30px; font-weight: 700; color: #000; cursor: pointer; }
+        .trial-banner {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid var(--success);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .trial-banner .free-text { color: var(--success); font-weight: 700; }
+        .trial-banner .donate-btn-banner { background: var(--success); border: none; padding: 8px 20px; border-radius: 30px; font-weight: 700; color: #000; cursor: pointer; transition: 0.3s; }
+        .trial-banner .donate-btn-banner:hover { transform: scale(1.02); filter: brightness(1.05); }
         
         @media (max-width: 768px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -367,7 +379,7 @@
             <img src="https://i.postimg.cc/T114NczG/pelo-recovery-image-removebg-preview.png" alt="PELO Recovery Centre" class="login-logo" onerror="this.src='https://i.postimg.cc/KvmJMsTk/pelo-transparent-logo.png'">
             <div class="login-title">PELO Recovery Centre</div>
             <div class="login-subtitle">Healing Lives, Restoring Families</div>
-            <div class="login-trial">✨ First Month Free · Then R1000 Admin Fee</div>
+            <div class="login-trial">❤️ Free Access · Supported by Corporate Donors</div>
             
             <button id="googleLoginBtn" class="btn-primary-custom btn-google" onclick="loginWithGoogle()">
                 <i class="fab fa-google" style="font-size:1.3rem;"></i> Sign in with Google
@@ -376,7 +388,7 @@
             <div class="auth-separator">or</div>
             
             <button id="demoLoginBtn" class="btn-primary-custom btn-demo" onclick="enterDemo()">
-                <i class="fas fa-rocket"></i> Start 1-Month Free Trial
+                <i class="fas fa-heart"></i> Start Your Free Journey
             </button>
             
             <button id="whatsappLoginBtn" class="btn-primary-custom btn-whatsapp" onclick="openWhatsAppDirect()">
@@ -402,15 +414,15 @@
             <div class="user-area" id="userArea">
                 <div class="user-avatar" id="userAvatar"><i class="fas fa-user"></i></div>
                 <span class="user-email" id="userEmailDisplay">Trial User</span>
-                <span id="trialDaysBadge" style="font-size:0.6rem; background:rgba(200,164,80,0.2); padding:2px 10px; border-radius:30px; color:var(--pelo-gold);">30 days left</span>
+                <span id="trialDaysBadge" style="font-size:0.6rem; background:rgba(0,255,136,0.2); padding:2px 10px; border-radius:30px; color:var(--success);">❤️ Free</span>
                 <button id="logoutMainBtn" class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
         
-        <!-- TRIAL BANNER -->
-        <div class="trial-banner" id="trialBanner">
-            <span>⏳ <span class="days" id="trialDaysDisplay">30</span> days remaining in your free trial</span>
-            <button class="pay-btn" onclick="payR1000()">Pay R1000 · Full Access</button>
+        <!-- TRIAL BANNER — FREE ACCESS -->
+        <div class="trial-banner" id="trialBanner" style="display:flex;">
+            <span>❤️ <span class="free-text">Free Access</span> — PELO Recovery is supported by corporate donations. No admin fees.</span>
+            <button class="donate-btn-banner" onclick="switchSection('donate')"><i class="fas fa-heart"></i> 💚 Donate to Support</button>
         </div>
         
         <!-- STATS -->
@@ -967,7 +979,8 @@
 
     <script>
         // ============================================================
-        // PELO RECOVERY CENTRE — v1.0 WITH DONATION FORM & 1-MONTH TRIAL
+        // PELO RECOVERY CENTRE — FREE ACCESS VERSION
+        // No admin fees. Supported by corporate donations.
         // ============================================================
         
         // ===== FIREBASE =====
@@ -992,7 +1005,6 @@
         var chatMessages = document.getElementById('chatMessages');
         var chatInput = document.getElementById('chatInput');
         var trialDaysBadge = document.getElementById('trialDaysBadge');
-        var trialDaysDisplay = document.getElementById('trialDaysDisplay');
         var soberCounter = document.getElementById('soberCounter');
         var dashSoberDays = document.getElementById('dashSoberDays');
         var milestoneFill = document.getElementById('milestoneFill');
@@ -1004,10 +1016,9 @@
         var idToken = null;
         var soberDays = 0;
         var totalQuizzesTaken = 0;
-        var trialDaysRemaining = 30; // 1-month free trial
-        var isPaid = false;
         var incognitoActive = false;
         var selectedDonationAmount = 0;
+        var isPaid = true; // ALWAYS TRUE — Free Access
         
         // ===== WHATSAPP =====
         var WHATSAPP_NUMBER = "27603004859";
@@ -1158,56 +1169,6 @@
         }
         
         // ============================================================
-        // TRIAL SYSTEM (30 Days)
-        // ============================================================
-        function loadTrialData() {
-            try {
-                var startDate = localStorage.getItem('pelo_recovery_trial_start');
-                var paid = localStorage.getItem('pelo_recovery_paid');
-                if (paid === 'true') {
-                    isPaid = true;
-                    trialDaysRemaining = 999;
-                    document.getElementById('trialBanner').style.display = 'none';
-                    trialDaysBadge.textContent = '✅ Full Access';
-                    return;
-                }
-                if (startDate) {
-                    var start = new Date(startDate);
-                    var now = new Date();
-                    var diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-                    trialDaysRemaining = Math.max(0, 30 - diff);
-                } else {
-                    localStorage.setItem('pelo_recovery_trial_start', new Date().toISOString());
-                    trialDaysRemaining = 30;
-                }
-                updateTrialDisplay();
-            } catch(e) { console.log('Trial load error'); }
-        }
-        
-        function updateTrialDisplay() {
-            trialDaysDisplay.textContent = trialDaysRemaining;
-            trialDaysBadge.textContent = trialDaysRemaining + ' days left';
-            if (trialDaysRemaining <= 0 && !isPaid) {
-                document.getElementById('trialBanner').style.display = 'block';
-                trialDaysBadge.textContent = '⏳ Trial Expired';
-                showToast('⏳ Your 1-month trial has expired. Please pay R1000 for full access.', 'warning');
-            } else if (trialDaysRemaining <= 3 && !isPaid) {
-                document.getElementById('trialBanner').style.display = 'flex';
-                trialDaysBadge.textContent = trialDaysRemaining + ' days left';
-            } else {
-                document.getElementById('trialBanner').style.display = 'none';
-            }
-        }
-        
-        function payR1000() {
-            var phone = document.getElementById('profilePhone').value || WHATSAPP_NUMBER;
-            var clean = phone.replace(/\D/g, '');
-            var msg = encodeURIComponent("I want to pay R1000 for full access to PELO Recovery Centre app. Please provide payment details.");
-            window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
-            showToast('💰 Payment request sent via WhatsApp. Admin will process.', 'success');
-        }
-        
-        // ============================================================
         // SWITCH SECTION
         // ============================================================
         function switchSection(sectionId) {
@@ -1226,14 +1187,13 @@
         // LOGIN
         // ============================================================
         function enterDemo() {
-            console.log('🚀 TRIAL LOGIN');
+            console.log('🚀 FREE ACCESS LOGIN');
             isDemo = true;
             currentUser = { uid: 'demo', email: 'trial@pelorecovery.co.za' };
             userEmailDisplay.textContent = 'Trial User';
             loginOverlay.classList.add('hidden');
             appContainer.style.display = 'block';
             loginError.textContent = '';
-            loadTrialData();
             loadSoberData();
             initApp();
         }
@@ -1253,7 +1213,6 @@
                     loginError.textContent = '';
                     idToken = user.getIdToken();
                     loadProfile(user.uid);
-                    loadTrialData();
                     loadSoberData();
                     initApp();
                 })
@@ -1282,7 +1241,6 @@
                 loginError.textContent = '';
                 idToken = user.getIdToken();
                 loadProfile(user.uid);
-                loadTrialData();
                 loadSoberData();
                 initApp();
             }
@@ -1300,7 +1258,6 @@
                             document.getElementById('profileName').value = data.name || '';
                             document.getElementById('profilePhone').value = data.phone || '';
                             if (data.soberDays) { soberDays = data.soberDays; updateSoberDisplay(); }
-                            if (data.paid) { isPaid = true; trialDaysRemaining = 999; updateTrialDisplay(); }
                         }
                     })
                     .catch(function(e) { console.log('Profile load error:', e); });
@@ -1668,7 +1625,7 @@
             recovery: [
                 { q: 'What is the first step in recovery?', options: ['Admitting you need help', 'Finding a job', 'Moving to a new city', 'Forgetting the past'], answer: 0 },
                 { q: 'How long does the PELO Recovery programme take?', options: ['3-6 months', '1 month', '1 year', '2 weeks'], answer: 0 },
-                { q: 'What is the intake fee for PELO Recovery?', options: ['R1000', 'R500', 'R2000', 'Free'], answer: 0 },
+                { q: 'What is the intake fee for PELO Recovery?', options: ['Free', 'R500', 'R2000', 'R1000'], answer: 0 },
                 { q: 'Who can contact PELO Recovery for help?', options: ['Anyone in Gauteng and beyond', 'Only people in Soweto', 'Only people with money', 'Only families'], answer: 0 },
                 { q: 'What does PELO Recovery provide?', options: ['Shelter, food, treatment, skills', 'Only food', 'Only shelter', 'Only medicine'], answer: 0 }
             ],
@@ -1803,20 +1760,19 @@
         // INIT
         // ============================================================
         function initApp() {
-            console.log('🚀 PELO Recovery Centre v1.0 · Initializing...');
+            console.log('🚀 PELO Recovery Centre v1.0 · Free Access · Initializing...');
             chessEngine = new EnhancedChessEngine();
             newPrayer();
             loadSoberData();
-            loadTrialData();
             console.log('✅ PELO Recovery Centre v1.0 · Loaded');
             console.log('   👤 User:', isDemo ? 'Trial' : (currentUser ? currentUser.email : 'None'));
             console.log('   💚 Sober Days:', soberDays);
-            console.log('   ⏳ Trial Days:', trialDaysRemaining);
+            console.log('   ❤️ Access: FREE — Supported by Corporate Donors');
             console.log('   📱 WhatsApp:', WHATSAPP_NUMBER);
             console.log('   📧 Enquiry Email: mphomoikangoe3@gmail.com');
         }
         
-        console.log('✅ PELO Recovery Centre v1.0 · Loading...');
+        console.log('✅ PELO Recovery Centre v1.0 · Free Access · Loading...');
     </script>
 </body>
 </html>
