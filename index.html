@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>PELO Recovery Centre · Healing Lives, Restoring Families</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
+
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         :root {
             --primary: #00B4D8;
             --primary-dark: #0096C7;
@@ -42,24 +42,24 @@
             --pelo-green: #1B4D3D;
             --pelo-gold: #C8A450;
         }
-        
+
         body { font-family: var(--font-exo); background: var(--dark-bg); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        
+
         .glass-card, .stat-card, .login-card { background: rgba(15,25,45,0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 28px; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
         .glass-card:hover, .stat-card:hover { border-color: var(--primary); transform: translateY(-3px); }
         .glass-card.healing-glow { border-color: var(--healing); box-shadow: 0 0 30px var(--healing-glow); }
         .glass-card.quantum-glow { border-color: var(--quantum); box-shadow: 0 0 30px var(--quantum-glow); }
         .glass-card.gold-glow { border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.3); }
         .glass-card.pelo-glow { border-color: var(--pelo-gold); box-shadow: 0 0 30px rgba(200,164,80,0.3); }
-        
+
         @keyframes glassPulse {
             0% { border-color: rgba(0,180,216,0.3); box-shadow: 0 0 0 0 rgba(0,180,216,0.1); }
             50% { border-color: rgba(138,43,226,0.6); box-shadow: 0 0 30px 5px var(--quantum-glow); }
             100% { border-color: rgba(0,180,216,0.3); box-shadow: 0 0 0 0 rgba(0,180,216,0.1); }
         }
-        
+
         .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,8,15,0.98); backdrop-filter: blur(20px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; flex-direction: column; }
         .login-overlay.hidden { display: none; }
         .login-card { max-width: 480px; width: 100%; padding: 40px 32px; text-align: center; animation: glassPulse 4s ease-in-out infinite; }
@@ -67,11 +67,11 @@
         .login-title { font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, var(--pelo-gold), var(--pelo-green)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 4px; }
         .login-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 25px; font-family: var(--font-mono); letter-spacing: 2px; }
         .login-trial { font-size: 0.7rem; color: var(--success); margin-bottom: 15px; background: rgba(0,255,136,0.1); padding: 8px 16px; border-radius: 30px; display: inline-block; }
-        
+
         .auth-separator { display: flex; align-items: center; gap: 15px; margin: 16px 0; color: var(--text-secondary); font-size: 0.65rem; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: var(--glass-border); }
         .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 10px; min-height: 20px; }
-        
+
         .btn-primary-custom { border: none; padding: 14px; border-radius: 60px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; color: white; transition: all 0.2s; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 12px; }
         .btn-primary-custom:hover { transform: translateY(-2px); filter: brightness(1.05); }
         .btn-google { background: #4285F4; box-shadow: 0 4px 15px rgba(66,133,244,0.3); }
@@ -84,7 +84,7 @@
         .btn-submit:hover { box-shadow: 0 8px 25px rgba(200,164,80,0.5); }
         .btn-donate { background: linear-gradient(135deg, var(--success), var(--secondary)); box-shadow: 0 4px 15px rgba(0,255,136,0.3); color: #000; }
         .btn-donate:hover { box-shadow: 0 8px 25px rgba(0,255,136,0.5); }
-        
+
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid var(--glass-border); margin-bottom: 25px; }
         .logo-area { display: flex; align-items: center; gap: 15px; }
         .header-logo { height: 50px; filter: drop-shadow(0 0 15px var(--pelo-gold)); }
@@ -96,12 +96,12 @@
         .user-email { font-size: 0.7rem; font-family: var(--font-mono); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .logout-btn { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.9rem; }
         .logout-btn:hover { color: var(--danger); }
-        
+
         .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 25px; }
         .stat-card { padding: 18px; text-align: center; border-radius: 20px; }
         .stat-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--pelo-gold), var(--pelo-green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .stat-label { font-size: 0.65rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-mono); }
-        
+
         .top-menu { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 25px; }
         .menu-btn { background: rgba(15,25,45,0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 40px; padding: 10px 18px; color: white; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.3s; font-family: var(--font-exo); }
         .menu-btn:hover, .menu-btn.active { background: rgba(0,180,216,0.3); border-color: var(--primary); color: var(--secondary); transform: translateY(-2px); }
@@ -109,7 +109,7 @@
         .menu-btn.healing:hover, .menu-btn.healing.active { background: rgba(255,107,157,0.2); border-color: var(--healing); color: var(--healing); }
         .menu-btn.quantum:hover, .menu-btn.quantum.active { background: rgba(138,43,226,0.3); border-color: var(--quantum); color: var(--quantum); }
         .menu-btn.donate-btn:hover, .menu-btn.donate-btn.active { background: rgba(0,255,136,0.2); border-color: var(--success); color: var(--success); }
-        
+
         .section { display: none; animation: fadeIn 0.3s ease; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -121,17 +121,17 @@
         .card-header.healing i { color: var(--healing); }
         .card-header.quantum i { color: var(--quantum); }
         .card-header.donate i { color: var(--success); }
-        
+
         .sober-counter { font-size: 4rem; font-weight: 900; text-align: center; padding: 20px; background: linear-gradient(135deg, var(--pelo-gold), var(--pelo-green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .sober-label { text-align: center; color: var(--text-secondary); font-size: 1rem; }
         .milestone-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 15px 0; }
         .milestone-fill { height: 100%; background: linear-gradient(90deg, var(--pelo-gold), var(--pelo-green)); border-radius: 10px; transition: width 0.5s ease; }
         .milestone-text { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-secondary); }
-        
+
         .prayer-card { background: rgba(200,164,80,0.05); border: 1px solid rgba(200,164,80,0.2); border-radius: 16px; padding: 20px; margin: 10px 0; }
         .prayer-card .quote { font-size: 1.1rem; font-style: italic; color: var(--pelo-gold); line-height: 1.6; }
         .prayer-card .author { text-align: right; color: var(--text-secondary); font-size: 0.8rem; margin-top: 10px; }
-        
+
         .chat-messages { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; margin-bottom: 12px; }
         .chat-message { padding: 10px 14px; margin-bottom: 10px; border-radius: 18px; max-width: 85%; font-size: 0.9rem; line-height: 1.5; }
         .chat-message.user { background: var(--primary); margin-left: auto; text-align: right; }
@@ -141,12 +141,12 @@
         .chat-send { background: var(--primary); border: none; border-radius: 60px; padding: 12px 24px; color: white; cursor: pointer; font-weight: 600; }
         .chat-send.gold { background: var(--pelo-gold); color: #000; }
         .chat-send.healing { background: var(--healing); color: #000; }
-        
+
         .quiz-option { display: block; width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; cursor: pointer; margin-bottom: 8px; text-align: left; transition: 0.2s; }
         .quiz-option:hover { background: rgba(0,180,216,0.2); border-color: var(--primary); }
         .quiz-option.correct { background: var(--success); color: #000; }
         .quiz-option.wrong { background: var(--danger); }
-        
+
         .chess-board-wrapper { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
         .chess-board-container { display: flex; justify-content: center; margin: 10px 0; width: 100%; max-width: 500px; }
         #chessBoard {
@@ -208,7 +208,7 @@
             0%, 100% { transform: scale(1); opacity: 0.4; }
             50% { transform: scale(1.1); opacity: 0.8; }
         }
-        
+
         .chess-sidebar { flex: 1; min-width: 200px; }
         .chess-sidebar .stat-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--glass-border); font-size: 0.85rem; }
         .chess-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
@@ -248,13 +248,13 @@
             color: var(--pelo-gold);
             margin: 10px 0;
         }
-        
+
         .whatsapp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .whatsapp-card { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px; text-align: center; border: 1px solid var(--glass-border); transition: 0.2s; }
         .whatsapp-card:hover { border-color: #25D366; transform: translateY(-2px); }
         .btn-whatsapp-card { background: #25D366; border: none; padding: 10px 20px; border-radius: 30px; color: white; cursor: pointer; font-weight: 600; transition: 0.2s; width: 100%; margin-top: 8px; }
         .btn-whatsapp-card:hover { transform: scale(1.02); filter: brightness(1.05); }
-        
+
         .toggle-group { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 16px; margin-top: 10px; flex-wrap: wrap; }
         .toggle-switch { position: relative; width: 50px; height: 28px; background: #333; border-radius: 14px; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
         .toggle-switch.active { background: var(--primary); }
@@ -262,7 +262,7 @@
         .toggle-switch.active.healing { background: var(--healing); }
         .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: white; border-radius: 50%; transition: 0.3s; }
         .toggle-switch.active::after { left: 25px; }
-        
+
         .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; margin-bottom: 6px; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
@@ -273,7 +273,7 @@
         .form-group .checkbox-label input { width: 18px; height: 18px; accent-color: var(--pelo-gold); cursor: pointer; }
         .form-section-title { font-size: 1rem; font-weight: 700; color: var(--pelo-gold); margin: 20px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--glass-border); }
         .form-section-title.donate-title { color: var(--success); border-bottom-color: var(--success); }
-        
+
         .bank-details {
             background: rgba(0,255,136,0.05);
             border: 1px solid rgba(0,255,136,0.2);
@@ -291,7 +291,7 @@
         .bank-details .detail-row:last-child { border-bottom: none; }
         .bank-details .label { color: var(--text-secondary); }
         .bank-details .value { color: var(--success); font-weight: 600; font-family: var(--font-mono); }
-        
+
         .donation-amount-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -317,13 +317,49 @@
             box-shadow: 0 0 20px rgba(0,255,136,0.2);
         }
         .donation-amount-btn .amount { color: var(--success); font-size: 1.1rem; }
-        
-        .footer { text-align: center; padding: 25px 20px 20px; margin-top: 30px; border-top: 1px solid var(--glass-border); }
-        .footer .copyright { font-size: 0.6rem; color: var(--text-secondary); }
-        .footer-logos { display: flex; justify-content: center; gap: 30px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .footer-logos img { height: 45px; width: auto; opacity: 0.8; transition: all 0.3s; }
-        .footer-logos img:hover { opacity: 1; transform: scale(1.05); }
-        
+
+        .footer {
+            text-align: center;
+            padding: 25px 20px 20px;
+            margin-top: 30px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .footer .copyright {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .bottom-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .bottom-logo {
+            height: 45px;
+            width: auto;
+            opacity: 0.8;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 8px rgba(0,180,216,0.2));
+            object-fit: contain;
+        }
+        .bottom-logo:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 12px rgba(0,180,216,0.4));
+        }
+
+        .quantum-line {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            opacity: 0.6;
+        }
+
         .trial-banner {
             background: rgba(0,255,136,0.1);
             border: 1px solid var(--success);
@@ -339,7 +375,7 @@
         .trial-banner .free-text { color: var(--success); font-weight: 700; }
         .trial-banner .donate-btn-banner { background: var(--success); border: none; padding: 8px 20px; border-radius: 30px; font-weight: 700; color: #000; cursor: pointer; transition: 0.3s; }
         .trial-banner .donate-btn-banner:hover { transform: scale(1.02); filter: brightness(1.05); }
-        
+
         @media (max-width: 768px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
             .header { flex-direction: column; text-align: center; }
@@ -352,8 +388,8 @@
             .menu-btn { padding: 8px 12px; font-size: 10px; }
             .sober-counter { font-size: 3rem; }
             .form-grid-2 { grid-template-columns: 1fr; }
-            .footer-logos { gap: 15px; }
-            .footer-logos img { height: 35px; }
+            .bottom-logos { gap: 15px; }
+            .bottom-logo { height: 35px; }
             .chess-square { font-size: 1.6em; }
             .donation-amount-grid { grid-template-columns: repeat(2, 1fr); }
             .bank-details .detail-row { flex-direction: column; gap: 4px; }
@@ -372,7 +408,7 @@
 </head>
 <body>
     <div id="particles-js"></div>
-    
+
     <!-- ===== LOGIN OVERLAY ===== -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
@@ -380,28 +416,28 @@
             <div class="login-title">PELO Recovery Centre</div>
             <div class="login-subtitle">Healing Lives, Restoring Families</div>
             <div class="login-trial">❤️ Free Access · Supported by Corporate Donors</div>
-            
+
             <button id="googleLoginBtn" class="btn-primary-custom btn-google" onclick="loginWithGoogle()">
                 <i class="fab fa-google" style="font-size:1.3rem;"></i> Sign in with Google
             </button>
-            
+
             <div class="auth-separator">or</div>
-            
+
             <button id="demoLoginBtn" class="btn-primary-custom btn-demo" onclick="enterDemo()">
                 <i class="fas fa-heart"></i> Start Your Free Journey
             </button>
-            
+
             <button id="whatsappLoginBtn" class="btn-primary-custom btn-whatsapp" onclick="openWhatsAppDirect()">
                 <i class="fab fa-whatsapp" style="font-size:1.3rem;"></i> Chat on WhatsApp
             </button>
-            
+
             <div id="loginError" class="login-error"></div>
         </div>
     </div>
-    
+
     <!-- ===== MAIN APP ===== -->
     <div id="appContainer" class="container" style="display: none;">
-        
+
         <!-- HEADER -->
         <div class="header">
             <div class="logo-area">
@@ -418,13 +454,13 @@
                 <button id="logoutMainBtn" class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
-        
+
         <!-- TRIAL BANNER — FREE ACCESS -->
         <div class="trial-banner" id="trialBanner" style="display:flex;">
             <span>❤️ <span class="free-text">Free Access</span> — PELO Recovery is supported by corporate donations. No admin fees.</span>
             <button class="donate-btn-banner" onclick="switchSection('donate')"><i class="fas fa-heart"></i> 💚 Donate to Support</button>
         </div>
-        
+
         <!-- STATS -->
         <div class="stats-row">
             <div class="stat-card"><div class="stat-value" id="soberDays">0</div><div class="stat-label">Days Sober</div></div>
@@ -432,7 +468,7 @@
             <div class="stat-card"><div class="stat-value" id="chessGames">0</div><div class="stat-label">Chess Games</div></div>
             <div class="stat-card"><div class="stat-value">⚛️</div><div class="stat-label">Quantum Powered</div></div>
         </div>
-        
+
         <!-- NAVIGATION -->
         <div class="top-menu">
             <button class="menu-btn active" data-section="dashboard" onclick="switchSection('dashboard')">🏠 Dashboard</button>
@@ -447,7 +483,7 @@
             <button class="menu-btn donate-btn" data-section="donate" onclick="switchSection('donate')">💚 Donate</button>
             <button class="menu-btn" data-section="settings" onclick="switchSection('settings')">⚙️ Settings</button>
         </div>
-        
+
         <!-- ===== SECTION: DASHBOARD ===== -->
         <div id="section-dashboard" class="section active">
             <div class="glass-card gold-glow">
@@ -467,14 +503,14 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: SOBRIETY ===== -->
         <div id="section-sobriety" class="section">
             <div class="glass-card healing-glow">
                 <div class="card-header healing"><i class="fas fa-heart"></i><h3>Sobriety Tracker</h3></div>
                 <div class="sober-counter" id="soberCounter">0</div>
                 <div class="sober-label">Days Sober</div>
-                
+
                 <div class="milestone-bar">
                     <div class="milestone-fill" id="milestoneFill" style="width:0%"></div>
                 </div>
@@ -483,13 +519,13 @@
                     <span id="nextMilestoneLabel">Next: 7 Days</span>
                     <span id="targetMilestone">365</span>
                 </div>
-                
+
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
                     <button class="chat-send gold" onclick="addSoberDay()"><i class="fas fa-plus"></i> Add Day</button>
                     <button class="chat-send" style="background:var(--danger);" onclick="resetSober()"><i class="fas fa-undo"></i> Reset</button>
                     <button class="chat-send" style="background:var(--pelo-gold);color:#000;" onclick="shareSober()"><i class="fab fa-whatsapp"></i> Share Progress</button>
                 </div>
-                
+
                 <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:15px; margin-top:10px;">
                     <h4 style="color:var(--pelo-gold);">🏆 Milestones</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
@@ -501,7 +537,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: PRAYER ===== -->
         <div id="section-prayer" class="section">
             <div class="glass-card gold-glow">
@@ -518,7 +554,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: CHAT ===== -->
         <div id="section-chat" class="section">
             <div class="glass-card quantum-glow">
@@ -532,7 +568,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: QUIZ ===== -->
         <div id="section-quiz" class="section">
             <div class="glass-card gold-glow">
@@ -556,7 +592,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: CHESS ===== -->
         <div id="section-chess" class="section">
             <div class="glass-card">
@@ -567,7 +603,7 @@
                     </div>
                     <div class="chess-sidebar">
                         <div class="game-status" id="gameStatus">⚪ White to move</div>
-                        
+
                         <div class="stat-item"><span>⚪ Turn</span><span id="turnIndicator">White</span></div>
                         <div class="stat-item">
                             <span>Difficulty</span>
@@ -581,29 +617,29 @@
                         <div class="stat-item"><span>🎮 Games Played</span><span id="chessGamesPlayed">0</span></div>
                         <div class="stat-item"><span>🏅 Games Won</span><span id="chessGamesWon">0</span></div>
                         <div class="stat-item"><span>⭐ Best Score</span><span id="bestScore">0</span></div>
-                        
+
                         <div class="chess-controls">
                             <button class="btn-chess" onclick="chessEngine.undoMove()"><i class="fas fa-undo"></i> Undo</button>
                             <button class="btn-chess primary" onclick="chessEngine.newGame()"><i class="fas fa-plus"></i> New</button>
                             <button class="btn-chess gold" onclick="chessEngine.showHint()"><i class="fas fa-lightbulb"></i> Hint</button>
                             <button class="btn-chess" onclick="chessEngine.toggleDifficulty()"><i class="fas fa-cog"></i> <span id="difficultyLabel">Medium</span></button>
                         </div>
-                        
+
                         <div class="move-history" id="moveHistory">No moves yet</div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: WHATSAPP ===== -->
         <div id="section-whatsapp" class="section">
             <div class="glass-card">
                 <div class="card-header"><i class="fab fa-whatsapp" style="color:#25D366;"></i><h3>WhatsApp Communication</h3></div>
-                
+
                 <button class="btn-primary-custom btn-whatsapp" style="margin-bottom:15px;" onclick="openWhatsAppDirect()">
                     <i class="fab fa-whatsapp" style="font-size:1.3rem;"></i> Chat with PELO Recovery Rep
                 </button>
-                
+
                 <div class="whatsapp-grid">
                     <div class="whatsapp-card">
                         <i class="fab fa-whatsapp" style="font-size:2rem;color:#25D366;"></i>
@@ -624,18 +660,18 @@
                         <button class="btn-whatsapp-card" onclick="openWhatsAppGroup('rep_user')">Open Group</button>
                     </div>
                 </div>
-                
+
                 <div style="margin-top:15px; text-align:center; font-size:0.7rem; color:var(--text-secondary);">
                     <i class="fas fa-phone"></i> Centre: 060 300 4859 · PELO Recovery Centre
                 </div>
-                
+
                 <div style="margin-top:10px; text-align:center; font-size:0.7rem; color:var(--text-secondary);">
                     <i class="fab fa-whatsapp"></i> WhatsApp Group Link: <span style="color:var(--pelo-gold);">Join the Recovery Support Group</span>
                     <button class="btn-chess gold" style="margin-left:10px;padding:4px 16px;" onclick="openWhatsAppGroupLink()">Join</button>
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: QUANTUM ===== -->
         <div id="section-quantum" class="section">
             <div class="glass-card quantum-glow">
@@ -660,19 +696,19 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: ENQUIRY & ADMISSION ===== -->
         <div id="section-enquiry" class="section">
             <div class="glass-card gold-glow">
                 <div class="card-header gold"><i class="fas fa-pen"></i><h3>Enquiry & Admission</h3></div>
                 <p style="color:var(--text-secondary); margin-bottom:20px;">Fill in the form below to enquire about admission to PELO Recovery Centre. A representative will contact you within 24 hours.</p>
-                
+
                 <form action="https://formsubmit.co/mphomoikangoe3@gmail.com" method="POST" id="enquiryForm">
                     <input type="hidden" name="_subject" value="PELO Recovery Centre - Enquiry & Admission">
                     <input type="hidden" name="_captcha" value="true">
                     <input type="hidden" name="_template" value="box">
                     <input type="hidden" name="_next" value="https://pelo-recovery.co.za/thank-you">
-                    
+
                     <div class="form-section-title">1. Enquiry Type</div>
                     <div class="form-group">
                         <label>What type of enquiry is this? <span style="color:var(--danger);">*</span></label>
@@ -685,7 +721,7 @@
                             <option value="professional">Professional Referral</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-section-title">2. Personal Information</div>
                     <div class="form-grid-2">
                         <div class="form-group">
@@ -719,7 +755,7 @@
                             <input type="email" name="email" placeholder="Email Address">
                         </div>
                     </div>
-                    
+
                     <div class="form-section-title">3. Guardian / Next of Kin (if applicable)</div>
                     <div class="form-grid-2">
                         <div class="form-group">
@@ -735,7 +771,7 @@
                             <input type="text" name="guardian_relationship" placeholder="e.g. Parent, Spouse, Sibling">
                         </div>
                     </div>
-                    
+
                     <div class="form-section-title">4. Address</div>
                     <div class="form-grid-2">
                         <div class="form-group">
@@ -770,7 +806,7 @@
                             <input type="text" name="postal_code" placeholder="Postal Code">
                         </div>
                     </div>
-                    
+
                     <div class="form-section-title">5. Substance & Issue History</div>
                     <div class="form-grid-2">
                         <div class="form-group">
@@ -805,7 +841,7 @@
                         <label>Your Story (Optional)</label>
                         <textarea name="brief_history" placeholder="Tell us your story... What brought you here? What are you hoping to achieve?"></textarea>
                     </div>
-                    
+
                     <div class="form-section-title">6. Contact Preferences</div>
                     <div class="form-grid-2">
                         <div class="form-group">
@@ -822,7 +858,7 @@
                             <input type="text" name="best_time" placeholder="e.g. Mornings, Afternoons, Evenings">
                         </div>
                     </div>
-                    
+
                     <div class="form-section-title">7. Consent</div>
                     <div class="form-group">
                         <label class="checkbox-label">
@@ -831,20 +867,20 @@
                             <span style="color:var(--danger);">*</span>
                         </label>
                     </div>
-                    
+
                     <button type="submit" class="btn-primary-custom btn-submit" style="margin-top:25px;">
                         <i class="fas fa-paper-plane"></i> Submit Enquiry
                     </button>
                 </form>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: DONATE ===== -->
         <div id="section-donate" class="section">
             <div class="glass-card" style="border-color:var(--success); box-shadow: 0 0 30px rgba(0,255,136,0.15);">
                 <div class="card-header donate"><i class="fas fa-heart" style="color:var(--success);"></i><h3>💚 Support PELO Recovery</h3></div>
                 <p style="color:var(--text-secondary); margin-bottom:20px;">Your donation helps us continue healing lives and restoring families. Every contribution makes a difference.</p>
-                
+
                 <div class="bank-details">
                     <h4 style="color:var(--success); margin-bottom:12px;">🏦 Banking Details</h4>
                     <div class="detail-row"><span class="label">Account Holder</span><span class="value">MindTech Industries</span></div>
@@ -854,7 +890,7 @@
                     <div class="detail-row"><span class="label">Branch Code</span><span class="value">250655</span></div>
                     <div class="detail-row"><span class="label">Reference</span><span class="value">Your Name + "PELO Donation"</span></div>
                 </div>
-                
+
                 <div style="margin: 20px 0 15px;">
                     <label style="display:block; font-size:0.8rem; color:var(--text-secondary); margin-bottom:10px;">💰 Select Donation Amount</label>
                     <div class="donation-amount-grid" id="donationAmountGrid">
@@ -867,15 +903,15 @@
                         <input type="number" id="customDonationAmount" class="form-group input" placeholder="Custom amount (R)" style="width:100%;padding:12px 14px;background:rgba(0,0,0,0.5);border:1px solid var(--glass-border);border-radius:16px;color:white;font-size:14px;" oninput="selectCustomDonation(this.value)">
                     </div>
                 </div>
-                
+
                 <form action="https://formsubmit.co/mphomoikangoe3@gmail.com" method="POST" id="donationForm">
                     <input type="hidden" name="_subject" value="PELO Recovery Centre - Donation Confirmation">
                     <input type="hidden" name="_captcha" value="true">
                     <input type="hidden" name="_template" value="box">
                     <input type="hidden" name="_next" value="https://pelo-recovery.co.za/thank-you-donation">
-                    
+
                     <div class="form-section-title donate-title">📝 Donation Confirmation</div>
-                    
+
                     <div class="form-grid-2">
                         <div class="form-group">
                             <label>Full Name <span style="color:var(--danger);">*</span></label>
@@ -894,28 +930,28 @@
                             <input type="number" name="donation_amount" id="donationAmountInput" placeholder="e.g. 250" required step="1" min="1">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Reference Used</label>
                         <input type="text" name="donation_reference" placeholder="The reference you used when depositing (e.g. John Doe PELO Donation)">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Date of Payment</label>
                         <input type="date" name="payment_date">
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Message (Optional)</label>
                         <textarea name="donation_message" placeholder="Any message you'd like to share with us..."></textarea>
                     </div>
-                    
+
                     <div class="form-section-title donate-title">Contact for Confirmation</div>
                     <div style="display:flex; gap:15px; flex-wrap:wrap; margin:10px 0 20px;">
                         <button type="button" class="btn-whatsapp-card" style="width:auto;padding:10px 20px;" onclick="openWhatsAppDonation()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
                         <button type="button" class="btn-whatsapp-card" style="width:auto;padding:10px 20px;background:var(--primary);" onclick="window.location.href='mailto:mphomoikangoe3@gmail.com'"><i class="fas fa-envelope"></i> Email</button>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="checkbox-label">
                             <input type="checkbox" name="donation_consent" required>
@@ -923,7 +959,7 @@
                             <span style="color:var(--danger);">*</span>
                         </label>
                     </div>
-                    
+
                     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;">
                         <button type="submit" class="btn-primary-custom btn-donate" style="flex:1;min-width:200px;">
                             <i class="fas fa-paper-plane"></i> Confirm Donation
@@ -933,18 +969,18 @@
                         </button>
                     </div>
                 </form>
-                
+
                 <div style="margin-top:15px; text-align:center; font-size:0.7rem; color:var(--text-secondary);">
                     <i class="fas fa-phone"></i> 060 300 4859 · <i class="fas fa-envelope"></i> mphomoikangoe3@gmail.com
                 </div>
             </div>
         </div>
-        
+
         <!-- ===== SECTION: SETTINGS ===== -->
         <div id="section-settings" class="section">
             <div class="glass-card">
                 <div class="card-header"><i class="fas fa-user-cog"></i><h3>Settings</h3></div>
-                
+
                 <div style="margin-bottom:20px;">
                     <label style="display:block; font-size:0.7rem; color:var(--text-secondary); margin-bottom:4px;">Display Name</label>
                     <input type="text" id="profileName" class="settings-input" style="width:100%; padding:12px; background:rgba(0,0,0,0.5); border:1px solid var(--glass-border); border-radius:30px; color:white; font-family:var(--font-exo);" placeholder="Your name">
@@ -953,27 +989,28 @@
                     <label style="display:block; font-size:0.7rem; color:var(--text-secondary); margin-bottom:4px;">Phone Number (WhatsApp)</label>
                     <input type="tel" id="profilePhone" class="settings-input" style="width:100%; padding:12px; background:rgba(0,0,0,0.5); border:1px solid var(--glass-border); border-radius:30px; color:white; font-family:var(--font-exo);" placeholder="+27 82 555 1234">
                 </div>
-                
+
                 <div class="toggle-group">
                     <span style="font-size:0.8rem;"><i class="fas fa-user-secret"></i> Incognito Mode</span>
                     <div class="toggle-switch" id="incognitoToggle" onclick="toggleIncognito()"></div>
                     <span style="font-size:0.6rem; color:var(--text-secondary);">Private healing session</span>
                 </div>
-                
+
                 <button id="saveProfileBtn" class="chat-send" style="width:100%; margin-top:15px;" onclick="saveSettings()">Save Settings</button>
             </div>
         </div>
-        
-        <!-- ===== FOOTER ===== -->
+
+        <!-- ===== FOOTER WITH BOTTOM LOGOS ===== -->
         <div class="footer">
-            <div class="footer-logos">
-                <img src="https://i.postimg.cc/T114NczG/pelo-recovery-image-removebg-preview.png" alt="PELO Recovery Centre" class="footer-logo" onerror="this.style.display='none'">
-                <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" alt="MindTech Industries" class="footer-logo" onerror="this.style.display='none'">
-                <img src="https://i.postimg.cc/T3ytnBqN/KD-LOGO-IMAGE-removebg-preview.png" alt="KD Concepts" class="footer-logo" onerror="this.style.display='none'">
+            <div class="bottom-logos">
+                <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" class="bottom-logo" alt="MindTech Industries" onerror="this.style.display='none'">
+                <img src="https://i.postimg.cc/RFQfK9k5/os-finallogo-removebg-preview.png" class="bottom-logo" alt="OS Logo" onerror="this.style.display='none'">
+                <img src="https://i.postimg.cc/T3ytnBqN/KD-LOGO-IMAGE-removebg-preview.png" class="bottom-logo" alt="KD Concepts" onerror="this.style.display='none'">
             </div>
+            <div class="quantum-line">secure by design · south africa</div>
             <div class="copyright">© 2026 PELO Recovery Centre · Powered by MindTech Industries</div>
             <div style="margin-top:8px; font-size:0.6rem; color:var(--text-secondary);">
-                <i class="fas fa-phone"></i> 060 300 4859 · <i class="fas fa-envelope"></i> mphomoikangoe3@gmail.com
+     
             </div>
         </div>
     </div>
@@ -983,7 +1020,7 @@
         // PELO RECOVERY CENTRE — FREE ACCESS VERSION
         // No admin fees. Supported by corporate donations.
         // ============================================================
-        
+
         // ===== FIREBASE =====
         var firebaseConfig = {
             apiKey: "AIzaSyD5OB59lG6bAsmQ7A97zXP_MfQ5AM3BYaw",
@@ -997,7 +1034,7 @@
         var auth = firebase.auth();
         var provider = new firebase.auth.GoogleAuthProvider();
         var db = firebase.firestore();
-        
+
         // ===== DOM REFS =====
         var loginOverlay = document.getElementById('loginOverlay');
         var appContainer = document.getElementById('appContainer');
@@ -1010,7 +1047,7 @@
         var dashSoberDays = document.getElementById('dashSoberDays');
         var milestoneFill = document.getElementById('milestoneFill');
         var nextMilestoneLabel = document.getElementById('nextMilestoneLabel');
-        
+
         // ===== STATE =====
         var isDemo = true;
         var currentUser = null;
@@ -1020,11 +1057,11 @@
         var incognitoActive = false;
         var selectedDonationAmount = 0;
         var isPaid = true; // ALWAYS TRUE — Free Access
-        
+
         // ===== WHATSAPP =====
         var WHATSAPP_NUMBER = "27603004859";
         var WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/PELORecoverySupport";
-        
+
         // ============================================================
         // WHATSAPP FUNCTIONS
         // ============================================================
@@ -1035,7 +1072,7 @@
             window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
             showToast('💬 Opening WhatsApp...', 'success');
         }
-        
+
         function openWhatsAppDonation() {
             var phone = document.getElementById('profilePhone').value || WHATSAPP_NUMBER;
             var clean = phone.replace(/\D/g, '');
@@ -1043,7 +1080,7 @@
             var msg = encodeURIComponent("Hello, I have made a donation of " + amount + " to PELO Recovery Centre. Please confirm receipt.");
             window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
         }
-        
+
         function openWhatsAppGroup(type) {
             var phone = document.getElementById('profilePhone').value || WHATSAPP_NUMBER;
             var clean = phone.replace(/\D/g, '');
@@ -1051,12 +1088,12 @@
             window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
             showToast('💬 Opening WhatsApp group...', 'info');
         }
-        
+
         function openWhatsAppGroupLink() {
             window.open(WHATSAPP_GROUP_LINK, '_blank');
             showToast('💬 Joining Recovery Support Group...', 'success');
         }
-        
+
         // ============================================================
         // DONATION FUNCTIONS
         // ============================================================
@@ -1072,7 +1109,7 @@
             document.getElementById('customDonationAmount').value = '';
             showToast('💰 Donation amount: R' + amount, 'info');
         }
-        
+
         function selectCustomDonation(value) {
             if (value && parseInt(value) > 0) {
                 document.querySelectorAll('.donation-amount-btn').forEach(function(btn) {
@@ -1082,7 +1119,7 @@
                 selectedDonationAmount = parseInt(value);
             }
         }
-        
+
         // ============================================================
         // SOBRIETY TRACKER
         // ============================================================
@@ -1093,12 +1130,12 @@
                 updateSoberDisplay();
             } catch(e) { console.log('Sober load error'); }
         }
-        
+
         function updateSoberDisplay() {
             soberCounter.textContent = soberDays;
             dashSoberDays.textContent = soberDays;
             document.getElementById('soberDays').textContent = soberDays;
-            
+
             var milestones = [7, 30, 90, 180, 365];
             var nextMilestone = milestones.find(function(m) { return m > soberDays; }) || 365;
             var prevMilestone = milestones.filter(function(m) { return m <= soberDays; }).pop() || 0;
@@ -1106,20 +1143,20 @@
             milestoneFill.style.width = Math.min(progress, 100) + '%';
             nextMilestoneLabel.textContent = 'Next: ' + nextMilestone + ' Days';
             document.getElementById('targetMilestone').textContent = nextMilestone;
-            
+
             if (soberDays === 7) { showToast('🎉 7 Days Sober! First week milestone!', 'success'); }
             if (soberDays === 30) { showToast('🎉 30 Days Sober! One month!', 'success'); }
             if (soberDays === 90) { showToast('🎉 90 Days Sober! Three months!', 'success'); }
             if (soberDays === 365) { showToast('👑 365 Days Sober! One year!', 'success'); }
         }
-        
+
         function addSoberDay() {
             soberDays++;
             localStorage.setItem('pelo_recovery_sober_days', soberDays);
             updateSoberDisplay();
             showToast('✅ Day ' + soberDays + ' added! Keep going!', 'success');
         }
-        
+
         function resetSober() {
             if (confirm('Are you sure you want to reset your sobriety counter? This cannot be undone.')) {
                 soberDays = 0;
@@ -1128,14 +1165,14 @@
                 showToast('🔄 Sobriety counter reset. New beginning.', 'warning');
             }
         }
-        
+
         function shareSober() {
             var phone = document.getElementById('profilePhone').value || WHATSAPP_NUMBER;
             var clean = phone.replace(/\D/g, '');
             var msg = encodeURIComponent("💚 I am " + soberDays + " days sober! PELO Recovery Centre - Healing Lives, Restoring Families. #Recovery #Healing");
             window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
         }
-        
+
         // ============================================================
         // PRAYER ROOM
         // ============================================================
@@ -1152,7 +1189,7 @@
             { quote: "The journey of a thousand miles begins with a single step. Take that step today.", author: "Lao Tzu" }
         ];
         var currentPrayerIndex = 0;
-        
+
         function newPrayer() {
             var randomIndex = Math.floor(Math.random() * prayerQuotes.length);
             currentPrayerIndex = randomIndex;
@@ -1160,7 +1197,7 @@
             document.getElementById('prayerQuote').textContent = '"' + prayer.quote + '"';
             document.getElementById('prayerAuthor').textContent = '— ' + prayer.author;
         }
-        
+
         function sharePrayer() {
             var prayer = prayerQuotes[currentPrayerIndex];
             var phone = document.getElementById('profilePhone').value || WHATSAPP_NUMBER;
@@ -1168,7 +1205,7 @@
             var msg = encodeURIComponent('🙏 " ' + prayer.quote + ' " — ' + prayer.author + '\n\nPELO Recovery Centre - Healing Lives, Restoring Families');
             window.open('https://wa.me/' + clean + '?text=' + msg, '_blank');
         }
-        
+
         // ============================================================
         // SWITCH SECTION
         // ============================================================
@@ -1183,7 +1220,7 @@
             });
             if (sectionId === 'chess') setTimeout(function() { if (chessEngine) chessEngine.updateBoard(); }, 100);
         }
-        
+
         // ============================================================
         // LOGIN
         // ============================================================
@@ -1198,7 +1235,7 @@
             loadSoberData();
             initApp();
         }
-        
+
         function loginWithGoogle() {
             console.log('🔑 GOOGLE LOGIN');
             loginError.textContent = '⏳ Signing in...';
@@ -1222,7 +1259,7 @@
                     loginError.textContent = '❌ ' + error.message;
                 });
         }
-        
+
         function logout() {
             if (!isDemo) auth.signOut();
             isDemo = false;
@@ -1231,7 +1268,7 @@
             loginOverlay.classList.remove('hidden');
             appContainer.style.display = 'none';
         }
-        
+
         auth.onAuthStateChanged(function(user) {
             if (user && !isDemo) {
                 currentUser = user;
@@ -1246,7 +1283,7 @@
                 initApp();
             }
         });
-        
+
         // ============================================================
         // PROFILE
         // ============================================================
@@ -1264,7 +1301,7 @@
                     .catch(function(e) { console.log('Profile load error:', e); });
             } catch(e) { console.log('Profile error:', e); }
         }
-        
+
         function saveSettings() {
             var uid = isDemo ? 'demo' : (currentUser ? currentUser.uid : 'demo');
             var name = document.getElementById('profileName').value;
@@ -1274,7 +1311,7 @@
                 .then(function() { showToast('✅ Settings saved!', 'success'); })
                 .catch(function(e) { showToast('❌ Error: ' + e.message, 'error'); });
         }
-        
+
         // ============================================================
         // TOAST
         // ============================================================
@@ -1288,7 +1325,7 @@
             document.body.appendChild(div);
             setTimeout(function() { if (div.parentNode) div.remove(); }, 4000);
         }
-        
+
         // ============================================================
         // CHAT
         // ============================================================
@@ -1296,19 +1333,19 @@
             var message = chatInput.value.trim();
             if (!message) return;
             chatInput.value = '';
-            
+
             var userDiv = document.createElement('div');
             userDiv.className = 'chat-message user';
             userDiv.textContent = message;
             chatMessages.appendChild(userDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            
+
             var typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message ai';
             typingDiv.textContent = 'Khensani is thinking...';
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            
+
             setTimeout(function() {
                 typingDiv.remove();
                 var responses = [
@@ -1330,15 +1367,15 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1500);
         }
-        
+
         document.getElementById('chatSendBtn').onclick = sendChatMessage;
         chatInput.onkeypress = function(e) { if (e.key === 'Enter') sendChatMessage(); };
-        
+
         // ============================================================
         // ENHANCED CHESS ENGINE
         // ============================================================
         var chessEngine = null;
-        
+
         class EnhancedChessEngine {
             constructor() {
                 this.game = new Chess();
@@ -1350,7 +1387,7 @@
                 this.gamesPlayed = 0;
                 this.gamesWon = 0;
                 this.bestScore = 0;
-                
+
                 this.pieceUnicode = {
                     'wK': '♔', 'wQ': '♕', 'wR': '♖', 'wB': '♗', 'wN': '♘', 'wP': '♙',
                     'bK': '♚', 'bQ': '♛', 'bR': '♜', 'bB': '♝', 'bN': '♞', 'bP': '♟'
@@ -1369,7 +1406,7 @@
             createBoard() {
                 const board = document.getElementById('chessBoard');
                 board.innerHTML = '';
-                
+
                 for (let row = 0; row < 8; row++) {
                     for (let col = 0; col < 8; col++) {
                         const square = document.createElement('div');
@@ -1397,7 +1434,7 @@
                     for (let col = 0; col < 8; col++) {
                         const squareName = this.getSquareName(row, col);
                         const piece = this.game.get(squareName);
-                        
+
                         if (piece) {
                             const square = document.querySelector(`[data-square="${squareName}"]`);
                             const pieceCode = piece.color + piece.type.toUpperCase();
@@ -1424,10 +1461,10 @@
                         this.selectedSquare = null;
                         this.validMoves = [];
                         this.updateBoard();
-                        
+
                         this.chessScore += 10;
                         this.addToMoveHistory(move.san);
-                        
+
                         if (!this.game.game_over()) {
                             setTimeout(() => this.makeAIMove(), 600);
                         } else {
@@ -1452,13 +1489,13 @@
                 const piece = this.game.get(square);
                 if (piece && piece.color === 'w') {
                     this.selectedSquare = square;
-                    this.validMoves = this.game.moves({ 
-                        square: square, 
-                        verbose: true 
+                    this.validMoves = this.game.moves({
+                        square: square,
+                        verbose: true
                     });
-                    
+
                     document.querySelector(`[data-square="${square}"]`).classList.add('selected-square');
-                    
+
                     this.validMoves.forEach(move => {
                         const targetSquare = document.querySelector(`[data-square="${move.to}"]`);
                         if (targetSquare) {
@@ -1478,7 +1515,7 @@
                 let move;
                 const captures = moves.filter(m => m.includes('x'));
                 const checks = moves.filter(m => m.includes('+'));
-                
+
                 if (captures.length > 0 && this.difficulty !== 'easy') {
                     move = captures[Math.floor(Math.random() * captures.length)];
                 } else if (checks.length > 0 && this.difficulty === 'hard') {
@@ -1490,7 +1527,7 @@
                 this.game.move(move);
                 this.updateBoard();
                 this.addToMoveHistory(move);
-                
+
                 if (this.game.game_over()) {
                     this.handleGameEnd();
                 }
@@ -1499,7 +1536,7 @@
             updateGameStatus() {
                 let status = '';
                 let statusColor = 'var(--pelo-gold)';
-                
+
                 if (this.game.in_checkmate()) {
                     const winner = this.game.turn() === 'w' ? 'Black' : 'White';
                     status = `🎉 Checkmate! ${winner} wins!`;
@@ -1593,7 +1630,7 @@
                     this.selectedSquare = null;
                     this.validMoves = [];
                     this.updateBoard();
-                    
+
                     const history = document.getElementById('moveHistory');
                     if (history.children.length > 0) {
                         history.removeChild(history.lastChild);
@@ -1605,7 +1642,7 @@
                 const difficulties = ['easy', 'medium', 'hard'];
                 const currentIndex = difficulties.indexOf(this.difficulty);
                 this.difficulty = difficulties[(currentIndex + 1) % difficulties.length];
-                document.getElementById('difficultyLabel').textContent = 
+                document.getElementById('difficultyLabel').textContent =
                     this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1);
                 showToast('♟️ Difficulty: ' + this.difficulty, 'info');
             }
@@ -1618,7 +1655,7 @@
                 }
             }
         }
-        
+
         // ============================================================
         // QUIZ
         // ============================================================
@@ -1641,7 +1678,7 @@
                 { q: 'When did South Africa become a democracy?', options: ['1990', '1994', '1996', '1999'], answer: 1 }
             ]
         };
-        
+
         var quizQuestions = [];
         var currentQuestionIndex = 0;
         var quizScore = 0;
@@ -1649,7 +1686,7 @@
         var quizStreak = 0;
         var quizTotal = 0;
         var isQuizComplete = false;
-        
+
         function generateQuiz() {
             var subject = document.getElementById('quizSubject').value;
             var bank = questionBank[subject] || questionBank.recovery;
@@ -1673,7 +1710,7 @@
             document.getElementById('quizCount').textContent = totalQuizzesTaken;
             showToast('📝 Quiz generated! ' + quizTotal + ' questions.', 'success');
         }
-        
+
         function resetQuiz() {
             quizQuestions = [];
             currentQuestionIndex = 0;
@@ -1685,11 +1722,11 @@
             document.getElementById('quizContainer').innerHTML = '<p style="color:var(--text-secondary);">Select a subject and click Generate.</p>';
             updateQuizStats();
         }
-        
+
         function renderQuizQuestion() {
             if (currentQuestionIndex >= quizQuestions.length && !isQuizComplete) {
                 isQuizComplete = true;
-                document.getElementById('quizContainer').innerHTML = 
+                document.getElementById('quizContainer').innerHTML =
                     '<div style="text-align:center;padding:20px;">' +
                     '<h3>🎉 Quiz Complete!</h3>' +
                     '<p style="font-size:1.5rem;font-weight:bold;color:var(--pelo-gold);">' + quizScore + '/' + quizQuestions.length + '</p>' +
@@ -1705,29 +1742,29 @@
             });
             document.getElementById('quizContainer').innerHTML = html;
         }
-        
+
         function selectQuizOption(el, idx) {
             if (isQuizComplete) return;
             var q = quizQuestions[currentQuestionIndex];
             var correct = q.answer;
             var allOptions = document.querySelectorAll('.quiz-option');
             allOptions.forEach(function(btn) { btn.disabled = true; });
-            if (idx === correct) { el.classList.add('correct'); quizScore++; quizCorrect++; quizStreak++; } 
+            if (idx === correct) { el.classList.add('correct'); quizScore++; quizCorrect++; quizStreak++; }
             else { el.classList.add('wrong'); allOptions[correct].classList.add('correct'); quizStreak = 0; }
             updateQuizStats();
-            setTimeout(function() { 
-                currentQuestionIndex++; 
-                renderQuizQuestion(); 
+            setTimeout(function() {
+                currentQuestionIndex++;
+                renderQuizQuestion();
             }, 1500);
         }
-        
+
         function updateQuizStats() {
             document.getElementById('quizScoreDisplay').textContent = quizScore;
             document.getElementById('quizTotalDisplay').textContent = quizTotal;
             document.getElementById('quizCorrectDisplay').textContent = quizCorrect;
             document.getElementById('quizStreakDisplay').textContent = quizStreak;
         }
-        
+
         // ============================================================
         // INCOGNITO
         // ============================================================
@@ -1738,7 +1775,7 @@
             toggle.style.background = incognitoActive ? 'var(--primary)' : '#333';
             showToast(incognitoActive ? '🔒 Incognito mode ON — private healing session.' : '🔓 Incognito mode OFF.', 'info');
         }
-        
+
         // ============================================================
         // PARTICLES
         // ============================================================
@@ -1756,7 +1793,7 @@
                 interactivity: { events: { onhover: { enable: true, mode: "repulse" } } }
             });
         } catch(e) { console.warn('Particles error:', e); }
-        
+
         // ============================================================
         // INIT
         // ============================================================
@@ -1772,7 +1809,7 @@
             console.log('   📱 WhatsApp:', WHATSAPP_NUMBER);
             console.log('   📧 Enquiry Email: mphomoikangoe3@gmail.com');
         }
-        
+
         console.log('✅ PELO Recovery Centre v1.0 · Free Access · Loading...');
     </script>
 </body>
